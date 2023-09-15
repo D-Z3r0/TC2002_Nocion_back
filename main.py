@@ -1,6 +1,6 @@
 from fastapi import FastAPI,Depends
-from schema.userschema import User
-from repository import userrepository
+from schema.tareaschema import Tarea
+from repository import tarearepository
 from database import SessionLocal, engine
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,32 +25,32 @@ def get_db():
     finally:
         db.close()
 @app.get("/")
-async def hello_world():
-    return {"message":"Hello World"}
+async def print_hello():
+    return {"message":"Conectado"}
 
 
-@app.get("/hello/{name}")
-async def hello_name(name:str):
-    return {"message":f"Hello {name}"}
+# @app.get("/tareas")
+# async def get_tareas(tarea:Tarea):
+#     return {"message":"Tareas Obtenidas Exitosamente"}
 
 
-@app.post("/hello-post")
-async def hello_name(user:User):
-    return {"message":f"Hello {user.name}"}
+# @app.post("/tarea_post)
+# async def hello_name(user:User):
+#     return {"message":f"Hello {user.name}"}
 
-@app.post("/user/create",response_model=User)
-async def create_user(user:User, db: Session = Depends(get_db)):
-    user=userrepository.create_user(db,user)
-    return user
+@app.post("/tarea/create",response_model=Tarea)
+async def create_tarea(tarea:Tarea, db: Session = Depends(get_db)):
+    tarea=tarearepository.create_tarea(db,tarea)
+    return tarea
 
-@app.get("/user/list",response_model=list[User])
-async def list_users(db: Session = Depends(get_db)):
-    users=userrepository.list_users(db)
-    return users
+@app.get("/tarea/list",response_model=list[Tarea])
+async def list_tareas(db: Session = Depends(get_db)):
+    tareas=tarearepository.list_tareas(db)
+    return tareas
 
-@app.get("/user/find/{id}",response_model=User)
-async def find_by_id(db:Session=Depends(get_db),id:int=0):
-    print(id)
-    user=userrepository.find_by_id(db,id)
-    print(user)
-    return user
+# @app.get("/user/find/{id}",response_model=User)
+# async def find_by_id(db:Session=Depends(get_db),id:int=0):
+#     print(id)
+#     user=userrepository.find_by_id(db,id)
+#     print(user)
+#     return user
