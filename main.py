@@ -48,6 +48,14 @@ async def list_tareas(db: Session = Depends(get_db)):
     tareas=tarearepository.list_tareas(db)
     return tareas
 
+@app.delete("/tarea/delete/{tarea_id}",response_model=Tarea)
+async def delete_tarea(tarea_id: int, db: Session = Depends(get_db)):
+    tarea = tarearepository.find_by_id(db, tarea_id)
+    if tarea is None:
+        raise HTTPException(status_code=404, detail="Tarea no encontrada")
+    tarearepository.delete_tarea(db, tarea_id)
+    return tarea
+
 # @app.get("/user/find/{id}",response_model=User)
 # async def find_by_id(db:Session=Depends(get_db),id:int=0):
 #     print(id)
