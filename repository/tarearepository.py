@@ -15,5 +15,13 @@ def list_tareas(db:Session):
     return tareas
 
 def find_by_id(db:Session, id:int):
-    user=db.query(usermodel.User).filter(usermodel.User.id==id).first()
-    return user
+    tarea=db.query(tareamodel.Tarea).filter(tareamodel.Tarea.id==id).first()
+    return tarea
+
+def delete_tarea(db: Session, tarea_id: int):
+    tarea = db.query(tareamodel.Tarea).filter(tareamodel.Tarea.id == tarea_id).first()
+    if tarea:
+        db.delete(tarea)
+        db.commit()
+        return tarea
+    return None  # Devolver None si la tarea no se encontró o no se eliminó
